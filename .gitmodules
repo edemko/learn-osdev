@@ -1,0 +1,3 @@
+[submodule "zedo-shim"]
+	path = zedo-shim
+	url = https://github.com/Zankoku-Okuno/zedo-shim.git

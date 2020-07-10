@@ -1,0 +1,4 @@
+# SRC=.
+# default: BUILD=build
+BUILD=.
+# DO=do
