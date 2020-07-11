@@ -9,7 +9,6 @@ set -e
 # if the target is `hello-os/build/.../foo.o`,
 # the source file is `hello-os/src/.../foo.s`
 # This computes the source directory.
-
 src="$(echo "$1" | sed 's+/build/+/src/+')"
 
 # Register the dependency on the source file.

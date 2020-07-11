@@ -46,6 +46,10 @@ SECTIONS {
     I'm using `SHORT` instead of two `BYTE` just so that the linker can handle endian-ness instead of me;
     since x86 is little-endian, this will show up in the output as the byte sequence `0x55 0xAA`, so don't be alarmed.
 
+    It's worth noting that `ld` will refuse to move backwards,
+    so if the text and data sections we link in are more than 510 combined, then `ld` will fail.
+    The error message is `cannot move location counter backwards`.
+
     It seems that the special `.` symbol actually _does_ move in the output when it's used here, though I couldn't find documentation to this effect (or, now that I think about it, about `.` outside an output section statement either!).
     In any case, `.` is a byte offset from the containing object; the section directive above, but the `mbr` section here:
     boy was I in for a surprise when I guessed otherwise and set it to 0x7DFE!

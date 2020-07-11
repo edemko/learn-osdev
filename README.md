@@ -19,9 +19,9 @@ The examples are tested on QEMU.
 
 So far, I have one example: a do-nothing bootloader that picks up after BIOS, and then immediately halts.
 Build with
-    `zedo hello-os/build/bootloader/do-nothing.mbr`
+    `zedo hello-os/build/bootloader-x86_64-bios/do-nothing.mbr`
     and run with
-    `qemu-system-x86_64 -drive file=hello-os/build/bootloader/do-nothing.mbr,format=raw`.
+    `qemu-system-x86_64 -drive file=hello-os/build/bootloader-x86_64-bios/do-nothing.mbr,format=raw`.
 
 ## References
 
