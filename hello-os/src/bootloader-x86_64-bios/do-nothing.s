@@ -7,6 +7,7 @@
 # So, I'll be using intel syntax for easier access to documentation.
 # Besides, I personally like destination-first argument order, and not prefixing register names with sigils.
 # Note the `noprefix` argument, which let's us write more like actual Intel syntax than a weird mash-up of ATT and Intel.
+# (See https://stackoverflow.com/a/46749011 for some more notes on GAS Intel vs. true Intel)
 # There is one thing to note, though: GNU still uses 0xDEADBEEF sytnax for hexadecimal as opposed to DEADBEEFh syntax;
 # dor me, this is highly preferable, since I can see from the start of reading a number what base it's in.
 .intel_syntax noprefix
