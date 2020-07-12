@@ -25,7 +25,7 @@ These are example programs that fit into (and are run from) the master boot reco
 I suppose a real bootloader would actually load a kernel, but these don't, and I'm still going to call them bootloaders.
 They are in `hello-os/src/bootloader-<arch>-bios/<example>.s`, though for now I only cover `x86_64`.
 
-  * `do-nothing`: Just halts immediately on booting.
+  * `donothing-bios`: Just initializes and halts immediately on booting.
     It stays halted even if the processor gets interrupts, which some examples can't say of themselves.
   * `hello-bios`: Uses (deprecated) BIOS calls to print `Hello BIOS!` on-screen.
   * `selfdump-bios`" Uses BIOS calls to print its own machine code in hexadecimal.

@@ -11,6 +11,19 @@
 .global bootloader
 bootloader:
 
+  # Initialize processor state; see `donothing-bios.s`
+  cli
+  jmp 0x0000:bootloader.canonPoint # cannonicalize the `cs:ip` insruction pointer
+  bootloader.canonPoint:
+  mov ax, 0x8000 # setup stack
+  mov ss, ax
+  xor ax, ax
+  mov sp, ax
+  mov ds, ax # setup segment registers
+  mov es, ax
+  cld # setup flags
+  sti
+
   # Clear the screen by setting the video mode.
   mov ah, 0x00 # BIOS function = set video mode
   mov al, 0x03 # video mode argument = 80x25 text mode

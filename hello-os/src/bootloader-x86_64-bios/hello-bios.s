@@ -1,5 +1,5 @@
 # This bootloader does a little more than nothing: it says hello and then stops doing things.
-# This file builds on the ideas of `do-nothing.s`, so understand that one first.
+# This file builds on the ideas of `donothing-bios.s`, so understand that one first.
 # I'm using the deprecated BIOS calls to do this, just so I have a retrocomputing example.
 # There are other approaches: see TODO.
 
@@ -24,7 +24,18 @@ hellostr:
 
 .global bootloader
 bootloader:
-  # TODO don't I have to set-up a stack?
+  # Initialize processor state; see `donothing-bios.s`
+  cli
+  jmp 0x0000:bootloader.canonPoint # cannonicalize the `cs:ip` insruction pointer
+  bootloader.canonPoint:
+  mov ax, 0x8000 # setup stack
+  mov ss, ax
+  xor ax, ax
+  mov sp, ax
+  mov ds, ax # setup segment registers
+  mov es, ax
+  cld # setup flags
+  sti
 
   # The calling convention for BIOS calls is to put the function code in `ah`,
   # additional arguments as instructed by the BIOS function,
