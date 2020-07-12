@@ -24,6 +24,8 @@ hellostr:
 
 .global bootloader
 bootloader:
+  # TODO don't I have to set-up a stack?
+
   # The calling convention for BIOS calls is to put the function code in `ah`,
   # additional arguments as instructed by the BIOS function,
   # and issue a specific interrupt.
@@ -90,18 +92,21 @@ putstr:
     inc si       # Point at the next character.
     # could also `lodsb`, which would be less code byes
     cmp al, 0    # Check if this character is NUL; exit if so, but print and continue if not
-    # I often see `xor al, al`, which sets flags as well; but TODO I haven't checked if it's actually smaller/faster somehow
+    # I often see `or al, al`, which sets flags as well; but TODO I haven't checked if it's actually smaller/faster somehow
     # I mean, it probably avoid the immediate value and therefore saves a byte.
     jnz putstr.loop.top
   putstr.loop.bottom:
   ret
+.endfunc
 
 
 # CALLCONV halt
 #| stop doing useful things
 # no arguments
 # does not return
+.func halt
 halt:
   cli
   hlt
   jmp halt
+.endfunc
