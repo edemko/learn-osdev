@@ -44,7 +44,7 @@ bootloader:
 
   # The first thing we want to do is clear the screen.
   # The BIOS may have left some information, but we don't want that cluttering up the screen.
-  # To do this, we'll switch vide modes, which will clear the screen for us as well.
+  # To do this, we'll switch video modes, which will clear the screen for us as well.
   mov ah, 0x00 # BIOS function = set video mode
   mov al, 0x03 # video mode argument = 80x25 text mode
   int 0x10     # call BIOS function

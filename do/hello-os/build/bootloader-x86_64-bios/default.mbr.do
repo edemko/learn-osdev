@@ -16,6 +16,7 @@ zedo ifchange "$ldScript"
 # Then, we instruct the GNU Linker to interpret the script (-T argument) with input from our object file.
 # In zedo, the contents of the output file should be written to stdout (here spelled `/dev/fd/1`, which is decently widespread [^1]).
 ld -T "$ZTOP/$ldScript" -o /dev/fd/1 "$2.o"
+chmod -x /dev/fd/1
 
 # REFERENCES
 # [1]: https://unix.stackexchange.com/a/123659

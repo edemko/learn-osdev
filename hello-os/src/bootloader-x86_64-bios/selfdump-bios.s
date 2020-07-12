@@ -1,6 +1,6 @@
 # This bootloader does a little more than nothing: it prints out its own machine code in hex and then stops doing things.
 # This file builds on the ideas of `hello-bios.s`, so understand that one first.
-# It's jsut-for-fun so the documentation is not (TODO yet) up-to=par.
+# It's just-for-fun so the documentation is not (TODO yet) up-to-par.
 
 
 .intel_syntax noprefix

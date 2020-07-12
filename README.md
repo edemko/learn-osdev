@@ -87,6 +87,9 @@ I'm just pointing this out because its unconventionality makes it easy to miss w
 In any case, using the/a default `text` script isn't customizable, so it's recommended to build your own.
 One the plus side, one you have your own, you don't have to make concessions for quick-and-dirty hacks: you just have something that works well.
 
+You'll get bad dissasebly running `objdump -D` on 16-bit code.
+Instead, use `objdump -D -mi386 -Maddr16,data16`.
+
 ### Super-speed `gdb` tutorial
 
 Run the emulator with remote debugging: `qemu -s -S <img>`

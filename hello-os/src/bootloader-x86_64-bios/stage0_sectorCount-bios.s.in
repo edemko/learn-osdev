@@ -1,0 +1,8 @@
+# TODO document me
+
+.intel_syntax noprefix
+.code16
+
+.data
+.global stage1.sectorCount
+stage1.sectorCount: .byte +REPLACE ME+

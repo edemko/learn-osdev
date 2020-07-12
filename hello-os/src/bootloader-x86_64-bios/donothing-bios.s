@@ -30,7 +30,7 @@ bootloader:
 # which is annoying this early in the boot process.
 
 # We don't want to be interrupted while getting set up, so we disable interrupts.
-cli # diable interrupts
+cli # disable interrupts
 
 # Although we know the bootloader is loaded at linear memory location `0x07C00`, because of real-mode segmentation,
 # this could be represented with a `cs:ip` of `0x0000:0x7C00` as one might expect, or `0x07C0:0x0000`, or anything in-between.
@@ -38,15 +38,15 @@ cli # diable interrupts
 # I've also seen this done as `jmp 0x07C0:0x0000`, but I'm not sure what that gains for a bootloader
 # WARNING: Although this syntax is accepted, I'm not really sure what's happening if you set `cs` to the start of the bootloader.
 # gdb doesn't let me see ip, but it reports `rip` as I'd expect, so it _might_ be fine…
-jmp 0x0000:bootloader.canonPoint
-bootloader.canonPoint:
+  jmp 0x0000:bootloader.canonPoint
+  bootloader.canonPoint:
 
 # With the code segment `cs` register now set, let's set the other segment registers.
 # I've taken the convention that they should all be zero.
 # After all, since any x86_64 system will quickly switch to a 64-bit mode anyway, which has a non-segmented memory model.
-xor ax,ax # we're not guaranteed the contents of ax, so clear it
-mov ds, ax # then we can indirectly move `ax` into the segment registers
-mov es, ax
+  xor ax, ax # we're not guaranteed the contents of ax, so clear it
+  mov ds, ax # then we can indirectly move `ax` into the segment registers
+  mov es, ax
 
 # We'll very likely want to be able to call functions, so we need to set up `ss:sp` appropriately.
 # For this, we need to choose some unused memory that will be out of the way of where we want to eventually load our kernel.
@@ -62,20 +62,20 @@ mov es, ax
 # the pushed value will be written; so the first pushed value will really end up at linear address 0x8FFFE as we want.
 # It's important to ensure the stack is always 2-byte aligned, since unaligned memory accesses can be much slower.
 
-mov ax, 0x8000 # set the stack segment register
-mov ss, ax     # again, these must be loaded indirectly from a general-purpose register
-xor ax, ax # set sp to zero
-mov sp, ax # and as a side-effect, we've also got `ax` zeroed out
+  mov ax, 0x8000 # set the stack segment register
+  mov ss, ax     # again, these must be loaded indirectly from a general-purpose register
+  xor ax, ax # set sp to zero
+  mov sp, ax # and as a side-effect, we've also got `ax` zeroed out
 
 # Most of the FLAGS register are for arithmetic flags, which are contantly flipping around, so we don't care what they look like.
 # The remaining bits contain the interrupts and direction register.
 # The interrupt enable bit we're already dealing with, but the direction bit should be initialized.
 # I've chosen forward here, since I expect it to be used with text which are naturally traversed forwards.
 # There are a few other bits, but I don't thing we care about them (but TODO anyway).
-cld # set direction forward for autoincrement instructions such as `lods`
+  cld # set direction forward for autoincrement instructions such as `lods`
 
 # We're done initializing now, so…
-sti # re-enable interrupts
+  sti # re-enable interrupts
 
 # At this point, the values of general-purpose registers could still be garbage.
 # In fact, I don't even want to say that `ax` is zero, since small changes in the above code—such as for a bugfix—migth change that.
