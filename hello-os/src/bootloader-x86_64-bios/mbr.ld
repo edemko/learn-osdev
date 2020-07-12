@@ -39,7 +39,10 @@ SECTIONS {
     For now, I'm just keeping everything in the same object file, so this has only been used with one input file.
     */
     *(.text);
-    /* TODO data sections are important, too */
+
+    /* After the text segments, we put any data segments. */
+    *(.data);
+
     /*
     Once we've included all the useful code, we need to place the magic 0xAA55 at the end of the MBR.
     Since the MBR is 512 bytes long, we move to position 510 and output the two bytes.
