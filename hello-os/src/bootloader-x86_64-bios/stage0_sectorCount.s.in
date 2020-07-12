@@ -1,0 +1,16 @@
+# This is a companion file to stage0.s.
+# It defines a single global variable (constant) specifying the number of sectors the stage1 bootloader takes.
+# However, I don't want to manually update this number, so this isn't _quite_ an assembly file.
+# Instead, a build script will perform a replacement, thereby generating actual assembly.
+# The extension is therefore `.s.in` instead of `.s` to represent that this is a template for assembly.
+
+.intel_syntax noprefix
+.code16
+
+.data
+# We have to use the `.global` directive to make this symbol available through the linker.
+.global stage1.sectorCount
+# Here's are variable.
+# We will replace the string `+REPLACE ME+` with a number i nthe build script:
+# see `do/hello-os/build.bootloader-x86_64-bios/stage0_sectorCount.o.do`
+stage1.sectorCount: .byte +REPLACE ME+

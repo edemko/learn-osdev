@@ -1,5 +1,5 @@
 # This bootloader does a little more than nothing: it prints out its own machine code in hex and then stops doing things.
-# This file builds on the ideas of `hello-bios.s`, so understand that one first.
+# This file builds on the ideas of `hello.s`, so understand that one first.
 # It's just-for-fun so the documentation is not (TODO yet) up-to-par.
 
 
@@ -11,7 +11,7 @@
 .global bootloader
 bootloader:
 
-  # Initialize processor state; see `donothing-bios.s`
+  # Initialize processor state; see `donothing.s`
   cli
   jmp 0x0000:bootloader.canonPoint # cannonicalize the `cs:ip` insruction pointer
   bootloader.canonPoint:

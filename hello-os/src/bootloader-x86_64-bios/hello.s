@@ -1,5 +1,5 @@
 # This bootloader does a little more than nothing: it says hello and then stops doing things.
-# This file builds on the ideas of `donothing-bios.s`, so understand that one first.
+# This file builds on the ideas of `donothing.s`, so understand that one first.
 # I'm using the deprecated BIOS calls to do this, just so I have a retrocomputing example.
 # There are other approaches: see TODO.
 
@@ -24,7 +24,7 @@ hellostr:
 
 .global bootloader
 bootloader:
-  # Initialize processor state; see `donothing-bios.s`
+  # Initialize processor state; see `donothing.s`
   cli
   jmp 0x0000:bootloader.canonPoint # cannonicalize the `cs:ip` insruction pointer
   bootloader.canonPoint:
@@ -99,13 +99,18 @@ putstr:
   putstr.loop.top:
     int 0x10 # Call the BIOS through interrupt.
   putstr.loop.entry:
-    mov al, [si] # Load the next character as the argument to the BIOS print-character call
-    inc si       # Point at the next character.
-    # could also `lodsb`, which would be less code byes
-    cmp al, 0    # Check if this character is NUL; exit if so, but print and continue if not
-    # I often see `or al, al`, which sets flags as well; but TODO I haven't checked if it's actually smaller/faster somehow
-    # I mean, it probably avoid the immediate value and therefore saves a byte.
-    jnz putstr.loop.top
+    lodsb # load the next character from `[si]` as the argument to the BIOS print-character call, and increment `si`
+    # This is fewer bytes and fewer instructions than the naive way:
+    #   mov al, [si] # Load the next character as the argument to the BIOS print-character call
+    #   inc si       # Point at the next character.
+    # But it does rely on the direction flag being forwards (which I know I set up early and don't change),
+    # and it takes advantage of the nice coincidence that `lods` instructions target `a`-series registers which happens to be the register the BIOS needs its argument in.
+    or al, al           # Check if this character is NUL;
+    jnz putstr.loop.top # exit if so, but print and continue if not.
+    # NOTE: the naive way to do this comparison is like `cmp al, 0`
+    # However, it takes two bytes (or several in 32- and 64-bit modes) to encode the immediate operand.
+    # Instead, `or`ing a register with itself leaves it unchanged, but also sets/clears the zero flag according to the value in that regiser.
+    # This is just a little efficiency you'll see output from a compiler, and often in hand-written assembly as well, so it pays to be familiar.
   putstr.loop.bottom:
   ret
 .endfunc

@@ -3,7 +3,7 @@ set -e
 
 # This creates a master boot record containing a BIOS-based stage0 bootloader.
 
-objFiles="stage0-bios.o stage0_sectorCount-bios.o"
+objFiles="stage0.o stage0_sectorCount.o"
 ldScript=/hello-os/src/bootloader-x86_64-bios/mbr.ld
 
 zedo ifchange "$ldScript"

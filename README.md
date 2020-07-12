@@ -19,22 +19,31 @@ The examples are tested on QEMU.
 
 So far, I only have some primitive hello-world-style bootloader examples.
 
-### Basic BIOS Bootloaders
+### Simple BIOS Bootloaders
 
 These are example programs that fit into (and are run from) the master boot record.
 I suppose a real bootloader would actually load a kernel, but these don't, and I'm still going to call them bootloaders.
 They are in `hello-os/src/bootloader-<arch>-bios/<example>.s`, though for now I only cover `x86_64`.
 
-  * `donothing-bios`: Just initializes and halts immediately on booting.
+  * `donothing`: Just initializes and halts immediately on booting.
     It stays halted even if the processor gets interrupts, which some examples can't say of themselves.
-  * `hello-bios`: Uses (deprecated) BIOS calls to print `Hello BIOS!` on-screen.
-  * `selfdump-bios`" Uses BIOS calls to print its own machine code in hexadecimal.
+  * `hello`: Uses (deprecated) BIOS calls to print `Hello BIOS!` on-screen.
+  * `selfdump`: Uses BIOS calls to print its own machine code in hexadecimal.
 
 Build these examples with
     `zedo hello-os/build/bootloader-x86_64-bios/<example>.mbr`
   and run with
     `qemu-system-x86_64 -drive file=hello-os/build/bootloader-x86_64-bios/<example>.mbr,format=raw`.
-Building these involves a GNU linker script `hello-os/src/bootloader-x86_64-bios/mbr.ld`
+Building involves a GNU linker script `hello-os/src/bootloader-x86_64-bios/mbr.ld`, so check that out.
+
+### Stage One BIOS Bootloaders
+
+Now I'm onto actual bootloaders; you know: things that load more code to continue booting.
+So far, I'm only through stage zero.
+They are in `hello-os/src/bootloader-<arch>-bios/<example>.s`, though for now I only cover `x86_64`.
+
+  * `stage0`: An MBR executable that uses BIOS calls to load a larger (stage-1) bootloader.
+
 
 
 ## References
