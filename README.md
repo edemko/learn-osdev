@@ -60,9 +60,11 @@ I've used it to guide myself through a high-level overview of the bootloading pr
 
 And now, some x86 ISA references:
 
+  * [AMD64 ArchitectureProgrammer’s Manual Volume 2: System Programming](https://www.amd.com/system/files/TechDocs/24593.pdf)
   * [Felix Cloutier's reference](https://www.felixcloutier.com/x86/)
   * [http://ref.x86asm.net/](http://ref.x86asm.net/)
   * [c9x.me](https://c9x.me/x86/index.html)
+  * [OSDev Wiki on x86_64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
 
 And some BIOS references:
 
@@ -77,6 +79,14 @@ Some notes to self for further documentation:
   * [Laod an absolute address with `mov` in GNU as](https://stackoverflow.com/a/57212627)
   * [`OFFSET` in gnu as](https://stackoverflow.com/questions/1669662/what-does-offset-in-16-bit-assembly-code-mean)
   * [Real-mode addressing mode limitations](https://stackoverflow.com/a/34345858)
+
+Since I can't get a far jump working under gas+qemu as far as gdb can tell, here's a collection of far-call related stuff and examples of it apparently working for people:
+  * [A Far Call Trick](https://wiki.osdev.org/Far_Call_Trick)
+  * [A bootloader example](https://appusajeev.wordpress.com/2011/01/27/writing-a-16-bit-real-mode-os-nasm/)
+
+Here's some links I haven't really sued yet, but they could be useful as I graduate away from BIOS programming:
+
+  * [ATA Read/Write Sector Example](https://wiki.osdev.org/ATA_read/write_sectors)
 
 ## Toolchain Notes
 
@@ -98,6 +108,7 @@ One the plus side, one you have your own, you don't have to make concessions for
 
 You'll get bad dissasebly running `objdump -D` on 16-bit code.
 Instead, use `objdump -D -mi386 -Maddr16,data16`.
+Additionally, adding `binary` into the `-M` options can get at the code in flat executables, but disassembling an ELF gets you the debugging symbols.
 
 ### Super-speed `gdb` tutorial
 
