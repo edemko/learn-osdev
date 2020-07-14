@@ -19,7 +19,7 @@
 #    For now, I'll just put up with only having a limited space to work in, but 65 sectors will have to do for now.
 #  * Execution begins in 16-bit real mode (this loader is written to also work on 16-bit machines).
 #  * The disk number the stage1 was loaded from is in `dl`, and
-#  * the number of sectors in the stage0 and stage1 bootloaders combined is in `dh`.
+#  * the number of sectors loaded by the BIOS and stage0 bootloader combined is in `dh`.
 #  * The `ds`, `es` segment registers are zeroed, but
 #  * the values in general-purpose registers are undefined.
 #  * An empty stack is initialized at `ss:sp = 0x8000:0x0000`.
@@ -39,6 +39,7 @@
 # See `do/hello-os/build/bootloader-x86_64-bios/stage0_sectorCount.o.do`.
 # The symbol itself should hold a single byte that says how large the stage1 bootloader is in sectors.
 .extern stage1.sectorCount
+
 
 .section .text
 .global bootloader
