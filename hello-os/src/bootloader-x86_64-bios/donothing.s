@@ -13,6 +13,8 @@
 .intel_syntax noprefix
 
 # This is executable code, so it goes in a `.text` section by convention.
+# Pay very close attention to the leading dots in section names, as they _are_ significant.
+# Apparently, the `.text` directive is equivalent to the one used here, _not_ `.section text`!
 # This section name could be changed, if desired, but you would have to adjust the linker script to match.
 .section .text
 
@@ -94,6 +96,6 @@ cli # disable interrupts
 # This method allows the processor to "sleep".
 # If an interrupt is generated, it will be ignored if possible, but if not, we'll make sure that we end up just waiting for another interrupt again.
 halt:
-  cli            # mask out as many interrupts as possible
-  hlt            # wait for an interrupt
-  jmp bootloader # if an interrupt fires anyway, just loop while doing nothing
+  cli      # mask out as many interrupts as possible
+  hlt      # wait for an interrupt
+  jmp halt # if an interrupt fires anyway, just loop while doing nothing

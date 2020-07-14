@@ -1,3 +1,5 @@
+# TODO update documentation
+
 # This is a companion file to stage0.s.
 # It defines a single global variable (constant) specifying the number of sectors the stage1 bootloader takes.
 # However, I don't want to manually update this number, so this isn't _quite_ an assembly file.

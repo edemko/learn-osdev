@@ -13,8 +13,9 @@
 # The interface exposed to the stage1 bootloader is as follows:
 #
 #  * Stage1 is assumed to be a flat binary executable.
-#  * The stage1 binary is loaded at linear address 0x07E00.
-#  * FIXME I'd like this to be accessed with `cs:ip = 0x07E0:0x0000`, but I'm having issues getting this to work at least under qemu.
+#  * The stage1 binary is loaded at linear address 0x08000.
+#    FIXME I should actually start at 0x08000 and leave the second sector for a partition table.
+#  * FIXME I'd like this to be accessed with `cs:ip = 0x0800:0x0000`, but I'm having issues getting this to work at least under qemu.
 #    For now, I'll just put up with only having a limited space to work in, but 65 sectors will have to do for now.
 #  * Execution begins in 16-bit real mode (this loader is written to also work on 16-bit machines).
 #  * The disk number the stage1 was loaded from is in `dl`, and
@@ -25,6 +26,7 @@
 #  * The flags register has interrupts enabled and direction forward, but other flags are undefined.
 #  * BIOS video mode is text mode (size technically undefined, but 80x25 if supported (and it probably is)), but
 #  * some text may already be on screen.
+#  * TODO document vis-a-vis the disk partition table
 
 
 .intel_syntax noprefix
@@ -64,7 +66,7 @@ bootloader:
   # We face a decision as to where to place the stage1 bootloader in memory.
   # Just as when we were decideing on a location for the stack back in `donothing.s`,
   # there are a number of free locations (though now obvs we need to also avoid the stack.
-  # I've selected linear address 0x07E00 to begin loading stage1.
+  # I've selected linear address 0x07E00 to begin loading the disk partition table and stage1.
   # This is just after where this stage0 is loaded.
   # This gives us up through address 0x7FFFF to play with for stage one,
   # which coems out to 0x78200 bytes, or 480.5 KiB, or 961 sectors.
@@ -103,9 +105,8 @@ bootloader:
   # Display a message that we are entering the next phase of booting
   mov si, OFFSET msg.enter.stage1
   call putstrln
-  jmp halt # TODO remove this
-  # jmp 0x07E0:0 # long-jump to the start of the stage1 bootloader # FIXME but I can't seem to get this to work on qemu, though the instruction encoding looks right ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻
-  jmp 0:0x7E00 # so just jump to the correct linear location, leaving `cs = 0`
+  # jmp 0x0800:0 # long-jump to the start of the stage1 bootloader # FIXME but I can't seem to get this to work on qemu, though the instruction encoding looks right ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻
+  jmp 0:0x8000 # so just jump to the correct linear location, leaving `cs = 0`
 
   # If we couldn't jump to the stage1 bootloader, print error messages and stop.
   bootloader.die:
