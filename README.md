@@ -69,11 +69,13 @@ I've used it to guide myself through a high-level overview of the bootloading pr
 
 And now, some x86 ISA references:
 
+  * [x64 Cheat Sheet](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
   * [AMD64 ArchitectureProgrammer’s Manual Volume 2: System Programming](https://www.amd.com/system/files/TechDocs/24593.pdf)
   * [Felix Cloutier's reference](https://www.felixcloutier.com/x86/)
   * [http://ref.x86asm.net/](http://ref.x86asm.net/)
   * [c9x.me](https://c9x.me/x86/index.html)
   * [OSDev Wiki on x86_64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
+  * [Wikibooks x86 Architecture](https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture)
 
 And some BIOS references:
 
@@ -134,6 +136,8 @@ Use `info registers <reg names...>` to inspect registers.
 Use `si` to step a single instruction.
 If you're about to call in interrupt routine, you can set a breakpoint for after it returns then continue.
 If a value in a register is unexpected, it can be overwritten with e.g. `set $si = 0x714`.
+
+
 
 ### Something Weird
 
