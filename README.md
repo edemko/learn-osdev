@@ -18,7 +18,7 @@ Good references (or at least they look good) are in [references.md](references.m
 It has notes about hardware/firmware/software interfaces as well as toolchain information.
 
 I'm hosting this in [github](https://github.com/Zankoku-Okuno/learn-osdev),
-and using their "Pages" feature to publish out-of-band documentation from the `docs` directory.
+and using their "Pages" feature to publish out-of-band [documentation](https://zankoku-okuno.github.io/learn-osdev/) from the `docs` directory.
 That's where the overview/reference documentation lives, but the most walkthrough-style documentation is in-line with the code.
 
 
