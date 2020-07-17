@@ -1,5 +1,5 @@
-# This bootloader is actually a bootloader instead of just an MBR executable.
-# It loads a number of sectors from disk just after the MBR, switches to 32-bit protected mode, then jumps to them.
+# This bootloader is actually a bootloader instead of just a bootsector executable.
+# It loads a number of sectors from disk just after the bootsector, switches to 32-bit protected mode, then jumps to them.
 # This file builds on the ideas of `stage0.rm.s`, so understand that one first.
 
 # The interface exposed to the stage1 bootloader is much mostly the same as for the real-mode version.
@@ -249,8 +249,8 @@ bootloader:
   # and we don't need nearly 1MiB of memory to get here.
   # The BIOS might have already turned this on, so the first thing we do is check for this.
   # Do do this, we will compare two addresses in megabytes of different parity.
-  # I'll choose the addresses 0x007DFE and 0x107DFE, since the former we know to be the MBR's magic string.
-  mov ax, 0xAA55    # the expected value in 0x7DFE (at the end of the MBR)
+  # I'll choose the addresses 0x007DFE and 0x107DFE, since the former we know to be the bootsector's magic string.
+  mov ax, 0xAA55    # the expected value in 0x7DFE (at the end of the bootsector)
   mov edi, 0x107DFE # the corresponding address in an odd-numbered MiB
   cmp ax, [edi]
   jnz a20.enabled # if they don't match, we know A20 is already enabled
@@ -263,7 +263,7 @@ bootloader:
   jmp a20.enabled # but otherwise we know we're already enabled
   # If we've made it here, the A20 line is definitely not enabled.
   a20.enable:
-    # QEMU (at least by default) does enable A20 before the MBR is loaded, so I'm not sure how to test this yet.
+    # QEMU (at least by default) does enable A20 before the bootsector is loaded, so I'm not sure how to test this yet.
     hlt # TODO I need to enable the A20 line
     # when I get to it, I should double-check and fail if it's still not enabled
   a20.enabled:

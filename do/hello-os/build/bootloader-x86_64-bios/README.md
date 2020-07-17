@@ -7,8 +7,8 @@
     <foo>.o
 
 <foo>.o &
-mbr.ld -->
-    <foo>.mbr
+bootsector.ld -->
+    <foo>.bootsector
 ```
 
 ## Stage-1 Programs/Bootloaders
@@ -29,7 +29,7 @@ stage0.<mode>.s -->
 
 stage0.<mode>.o &
 <foo>.<mode>.sectorCount.o &
-mbr.ld -->
+bootsector.ld -->
     <foo>.<mode>.stage0
 ```
 

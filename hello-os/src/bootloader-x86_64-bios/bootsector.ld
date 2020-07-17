@@ -1,4 +1,4 @@
-/* This linker script for GNU ld which produces unadorned binary files suitable for use as a master boot record (MBR) as part of the BIOS booting process.
+/* This linker script for GNU ld which produces unadorned binary files suitable for use as a bootsector as part of the BIOS booting process.
 */
 
 /*
@@ -8,8 +8,8 @@ That said, I haven't (yet) seen many linker scripts with any comments at all <_<
 
 /*
 First we set the output format.
-If this weren't set to `binary`, there would be all sorts of executable/library headers wrapping up our MBR.
-The MBR is most convenient to work with in plain binary, so we don't want any of that.
+If this weren't set to `binary`, there would be all sorts of executable/library headers wrapping up our bootsector.
+The bootsector is most convenient to work with in plain binary, so we don't want any of that.
 */
 OUTPUT_FORMAT(binary)
 
@@ -30,9 +30,9 @@ SECTIONS {
 
   /*
   In out case, we only have one output section: the master boot record.
-  It doesn't much matter what we name it, since the name won't be output anywhere; I've gone with `.mbr` because I think it's fairly descriptive.
+  It doesn't much matter what we name it, since the name won't be output anywhere; I've gone with `.bootsector` because I think it's fairly descriptive.
   */
-  .mbr : {
+  .bootsector : {
     /*
     We include the text sections of all input files first.
     TODO I believe the order of the files on the command-line is relevant, so pass the one with the bootloader's entry-point first.
@@ -44,8 +44,8 @@ SECTIONS {
     *(.data);
 
     /*
-    Once we've included all the useful code, we need to place the magic 0xAA55 at the end of the MBR.
-    Since the MBR is 512 bytes long, we move to position 510 and output the two bytes.
+    Once we've included all the useful code, we need to place the magic 0xAA55 at the end of the bootsector.
+    Since the bootsector is 512 bytes long, we move to position 510 and output the two bytes.
     I'm using `SHORT` instead of two `BYTE` just so that the linker can handle endian-ness instead of me;
     since x86 is little-endian, this will show up in the output as the byte sequence `0x55 0xAA`, so don't be alarmed.
 
@@ -54,7 +54,7 @@ SECTIONS {
     The error message is `cannot move location counter backwards`.
 
     It seems that the special `.` symbol actually _does_ move in the output when it's used here, though I couldn't find documentation to this effect (or, now that I think about it, about `.` outside an output section statement either!).
-    In any case, `.` is a byte offset from the containing object; the section directive above, but the `mbr` section here:
+    In any case, `.` is a byte offset from the containing object; the section directive above, but the `bootsector` section here:
     boy was I in for a surprise when I guessed otherwise and set it to 0x7DFE!
     */
     . = 510;

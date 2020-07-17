@@ -1,11 +1,11 @@
-# This bootloader is actually a bootloader instead of just an MBR executable.
-# It loads a number of sectors from disk just after the MBR, then jumps to them.
+# This bootloader is actually a bootloader instead of just a bootsector executable.
+# It loads a number of sectors from disk just after the bootsector, then jumps to them.
 # This file builds on the ideas of `hello.s`, so understand that one first.
 # I'm using the deprecated BIOS calls to do this, just so I have a retrocomputing example.
 # There are other approaches: see TODO.
 
 # The overall architecture is called a two-stage bootloader.
-# The MBR is "stage zero", whose only purpose is to load a larger bootloader.
+# The bootsector is "stage zero", whose only purpose is to load a larger bootloader.
 # This larger bootloader is called "stage one", and should have enough space for a filesystem driver.
 # This should allow it to search for, load, and pass control to a kernel file.
 # However, this stage zero doesn't assume the purpose of the stage 1, so it can be reused for multiple stage 1 bootloaders.
