@@ -9,6 +9,10 @@
 .global quble.load
 .func quble.load
 quble.load:
+  # prologue
+  mov bx, es # save es
+  push bx
+
   # Use BIOS to load the stage 1 bootloader a disk.
   mov ah, 0x02                  # BIOS function = read sectors
   mov dl, [quble.diskno]        # disk
@@ -37,11 +41,17 @@ quble.load:
   shl di, 9      # multiply sectors by 512 to get bytes loaded
   add di, 0x7E00 # add on the base address
   xor ax, ax # clears carry flag
+
+  # epilogue
+  load.ret:
+  pop bx # restore es
+  mov es, bx
   ret
 
+  # failure continuation
   load.err:
   stc
-  ret
+  jmp load.ret
 .endfunc
 
 .global quble.initVideo
@@ -61,6 +71,8 @@ quble.initVideo:
   ret
 .endfunc
 
+
+# FIXME move quble.message to a generic BIOS text-mode library
 .global quble.message
 .func quble.message
 quble.message:
@@ -91,7 +103,7 @@ quble.message:
 .endfunc
 
 
-
+# FIXME move quble.halt to a generic x86 library
 .global quble.halt
 .func quble.halt
 quble.halt:

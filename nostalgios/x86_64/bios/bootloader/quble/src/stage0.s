@@ -29,6 +29,12 @@ _start:
   xor ax, ax
   mov sp, ax
 
+  # setup segment registers as required by Quble
+  # (nos-quble will not clobber segment registers)
+  mov ds, ax
+  mov es, ax
+
+
   # Initialize video mode and clear screen
   call quble.initVideo
 
@@ -54,10 +60,6 @@ _start:
 
   mov si, OFFSET msg.goodbye
   call quble.message
-
-  # setup segment registers as required by Quble
-  mov ds, ax
-  mov es, ax
 
   # clear screen and jump to next stage
   call quble.initVideo

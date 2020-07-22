@@ -36,6 +36,14 @@ Some GNU Intel-syntax quirks:
   * [`OFFSET` in gnu as](https://stackoverflow.com/questions/1669662/what-does-offset-in-16-bit-assembly-code-mean)
   * [Include binary file with GNU toolchain](https://stackoverflow.com/a/18467409) but this can also be done with the linker
 
+#### Tricks
+
+Be on the lookout for this ridiculous error message:
+    `Error: invalid operands (*UND* and *ABS* sections) for <operator>`.
+GNU sometimes says this when it means:
+    `Error: missing backslash before a macro argument name 'limit'`
+but of course, it'd be too much to expect GNU to explain anything.
+
 ### Linker
 
   * [GNU Linker Manual](https://sourceware.org/binutils/docs/ld/index.html)
@@ -235,3 +243,4 @@ acronyms are pronounceable as a single word in English, initialisms are spelled 
   * BIOS is an acronym starting with a consonant: "a BIOS"
   * UEFI is an initialism starting with a consonant sound (yes, "y" counts in this situation): "a UEFI"
   * XML is an initialism starting with a vowel sound: "an XML"
+  * NMI is an initialism starting with a vowel sound: "an NMI"

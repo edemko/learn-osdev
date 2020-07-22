@@ -211,7 +211,7 @@ bootloader:
 
   # Disable interrupts, since the IVT is meant for 16-bit mode and will be garbage for 32-bit mode
   cli
-  # Point the GST register at the table we painstakingly set up above.
+  # Point the GDT register at the table we painstakingly set up above.
   lgdt [gdtr.memory]
   # The first bit of a special-purpose control register controls whether the processor is in real or protected mode.
   # We need to set it, but this requires manipulation in a general-purpose register.
