@@ -6,10 +6,15 @@
 # Unless otherwise noted, these functions expect to be called with the direction flag forward.
 # The behavior of the A20 line is not exercised.
 
-# FIXME move elsewhere
+# CALLCONV quble.message
+# Print a NUL-terminated string at the current cursor location, the nmove to the next line.
+# MODE 16-bit real mode
+# ARGUMENTS
+# si: pointer to start of string
+# CLOBBERS
+# ax, bx, cx, dx, si
 .extern quble.message
 
-# TODO documentation
 # CALLCONV quble.initVideo
 # Set video mode to 80x25x16color text mode using BIOS calls.
 # MODE 16-bit real mode

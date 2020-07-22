@@ -1,13 +1,14 @@
 .intel_syntax noprefix
 
 .include "gdt.h"
+.include "stage1text.h"
 
 # WARNING that there is no default `.code{16,32,64}` for this file
 # that's because we have to move between all three for our entrypoint
 
 
 .section .data
-# These GDT structures must be put a the start of this file because GNA as is single-pass
+# These GDT structures must be put a the start of this file because GNU as is single-pass
 
 GDTR.PM gdt32
 GDT.PM gdt32
@@ -23,7 +24,15 @@ GDTend.PM gdt32
 .section .entry
 _start:
   .code16
-  # TODO print message about entering protected mode
+
+  # Use BIOS to disable the cursor, since there's no interaction at this point
+  mov ah, 0x01 # BIOS function = set cursor shape
+  mov ch, 0x10 # set cursor disabled bit
+  int 0x10     # call BIOS video function
+
+  # Print message about entering protected mode
+  mov si, OFFSET msg.protected.enter
+  call printLn16
 
   # Initialize GDT register (see `.data` section below for the GDT we use)
   lgdt [gdt32.r]
@@ -49,13 +58,29 @@ _start:
   mov esp, 0x90000 # address just after the stack
 
   # Enable A20 line
-    # TODO print message about it (32-bit VGA library code)
-    # TODO check if A20 is already on
-    # TODO enable A20 if not on
-    # TODO die if still not on
+  mov ax, 0xAA55    # the expected value in 0x7DFE (at the end of the bootsector)
+  mov edi, 0x107DFE # the corresponding address in an odd-numbered MiB
+  cmp ax, [edi]
+  jnz a20.enabled # if they don't match, we know A20 is already enabled
+    # Even if they do match, it might just be chance.
+    # To make sure it's not already on, let's write to the location and check again.
+    rorw [edi], 8 # rotate a word 8 bits, thereby swapping the bytes
+    cmp ax, [edi]
+    mov [edi], ax # we want to clean up the memory we altered, just in case this sector is written back
+    jnz a20.enabled   # if we've forced them to not match, we know A20 is already enabled
+  a20.enable:
+    # If we've made it here, the A20 line is definitely not enabled.
+    mov esi, OFFSET msg.a20.enabling.unimplemented
+    call printLn32 # give a little status update
+    # QEMU (at least by default) does enable A20 before the bootsector is loaded, so I'm not sure how to test this yet.
+    hlt # TODO I need to enable the A20 line
+    # TODO check that A20 enabling worked, but die if still not on
+  a20.enabled:
+  mov esi, OFFSET msg.a20.enabled
+  call printLn32 # give a little status update
 
 
-# TODO setup interrupt table?
+
 # TODO enter long mode
   # set up a long-mode GDT
   # initialize page tables
@@ -69,6 +94,7 @@ _start:
     # thereby using 16KiB (max offset +0x3fff) for page tables
     # which is a suprisingly good 99.2% efficiency
     # however, if "huge" 2MiB pages are allowed, then we can skip level-1
+    # OTOH, I may be able to use 4KiB paging to get stack protection
 
   # enable PAE (cr4.pae (bit 5?)) (FIXME use `bts` instr elsewhere as well)
   # load cr3 (start of page table tree)
@@ -88,3 +114,10 @@ _start:
     cli
     hlt
     jmp die
+
+
+.section .data
+
+msg.protected.enter: .asciz "Entering protected mode..."
+msg.a20.enabled: .asciz "A20 line enabled."
+msg.a20.enabling.unimplemented: .asciz "UNIMPLEMENTED: enable A20 line"

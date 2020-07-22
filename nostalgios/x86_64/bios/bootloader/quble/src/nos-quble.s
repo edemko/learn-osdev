@@ -17,8 +17,8 @@ quble.load:
   mov ah, 0x02                  # BIOS function = read sectors
   mov dl, [quble.diskno]        # disk
   mov cx, [quble.bootchain + 0] # sector (cl) & cylinder (ch)
-  mov al, [quble.bootchain + 2] # number of sectors (less one)
-  mov dh, [quble.bootchain + 3] # head
+  mov dh, [quble.bootchain + 2] # head
+  mov al, [quble.bootchain + 3] # number of sectors (less one)
   cmp al, 64     # check requested sector count not too big
   ja load.err
   inc al         # adjust requested sector count
@@ -28,12 +28,12 @@ quble.load:
   xor bx, bx
   int 0x13                      # call BIOS disk function
   pop bx         # restore requested sector count into bl
-  
+
   # Check for errors
   jc load.err # BIOS sets carry flag set on error
   cmp al, bl   # BIOS loads al with actual number of sectors read
   jnz load.err # error if actual != requested
-  
+
   load.ok:
   # Prepare return values
   xor bh, bh # move loaded sector count from bl to bx
