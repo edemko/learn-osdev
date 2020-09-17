@@ -1,0 +1,24 @@
+data Unlinked
+  = Literal ByteString
+  | AlignTo Int
+  | Select [Branch]
+
+data Branch = Branch
+  { condition :: Env -> Bool -- FIXME use a dedicated EDSL ADT to describe what kind of calculations are possible
+  , arm :: Env -> Either LinkError ByteString -- FIXME use a dedicates EDSL ADT
+  }
+
+data Env = Env
+  { labels :: Map Text Location
+  , here :: Location
+  , options :: LinkerOptions
+  }
+
+data LinkerOptions = LdOpt
+  {} -- TODO target machine and mode, optimization flags, and so on…
+
+
+{-
+NOTE: the (single-pass) assembler and linker must share the same expression language.
+Then, expressions that act on a label in the assembler can have their calculation deferred to the linker.
+-}
